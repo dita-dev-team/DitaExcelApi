@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Upload File</title>
+    <title>Upload Image</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -14,14 +14,26 @@
     <link href="css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div id="app">
-    <upload>
+<div class="container">
+    <h1>
+        Select Image to Attach
+    </h1>
+    <form method="post" enctype="multipart/form-data" >
+    <input type="file" placeholder="Attach Image">
 
-    </upload>
+        <h2>
+            Preview
+        </h2>
+
+    <button type="submit" class="form-group-lg" >Save</button>
+    </form>
+
+
+    <h1>Showing Uploaded Images</h1>
+
+
+
 </div>
-<script>
-    const URL = "{{ $url }}";
-</script>
 <script src="/js/app.js"></script>
 </body>
 </html>

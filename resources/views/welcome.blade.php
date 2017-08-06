@@ -84,6 +84,7 @@
 
                 <div class="links">
                     <a href="/upload">Upload</a>
+                    <a href="/images">Image Center</a>
                 </div>
             </div>
         </div>
