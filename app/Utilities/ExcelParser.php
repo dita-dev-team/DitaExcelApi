@@ -19,6 +19,7 @@ class ExcelParser
 {
     STATIC $i = 0;
     STATIC $j = 0;
+	STATIC $shift = '';
 
     public static function copyToDatabase($path)
     {
@@ -74,18 +75,18 @@ class ExcelParser
 
     public static function getDetails(&$sheet)
     {
+	    self::$shift     = self::getShift( $sheet->getTitle() );
         $dateTimeDetails = self::getDateTimeDetails($sheet);
         $dateTimeDetails = self::stringToDate($dateTimeDetails);
         $dateTimeDetails->subHours(2); // all exams have a duration of two hours
-        $shift = self::getShift($sheet->getTitle());
         $room = $sheet->get(ExcelParser::$i)->get(0);
         if (is_null($room)) {
             $room = 'NO ROOM';
         }
         $details = [
-            'dateTime' => $dateTimeDetails,
-            'shift' => $shift,
-            'room' => $room
+	        'dateTime' => $dateTimeDetails,
+	        'shift'    => self::$shift,
+	        'room'     => $room
         ];
 
         return $details;
@@ -198,7 +199,8 @@ class ExcelParser
                 $prefix = substr($string, 0, 3);
                 $codes = explode('/', substr($string, 3));
                 foreach ($codes as $code) {
-                    array_push($course_codes, $prefix . $code . 'A');
+	                $section = self::$shift == 'athi' ? 'A' : ( self::$shift == 'day' ? 'T' : 'X' );
+	                array_push( $course_codes, $prefix . $code . $section );
                 }
             }
 

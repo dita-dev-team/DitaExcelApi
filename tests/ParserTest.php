@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
@@ -172,6 +173,36 @@ class ParserTest extends TestCase
                 'name' => 'DIS-660X',
             ]);
     }
+
+	public function testSaveToDBAugust2017() {
+		$path = storage_path( 'testing/excel-new2.xlsx' );
+		\App\Utilities\ExcelParser::copyToDatabase( $path );
+		$this
+			->seeInDatabase( 'units', [
+				'name' => 'ACS-354A',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'ICO-018T',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'PSY-414T',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'COM-264B',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'MME-614X',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'PSY-211P',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'DEV-111X',
+			] )
+			->seeInDatabase( 'units', [
+				'name' => 'HRM-611X',
+			] );
+	}
 
     public function testRoute()
     {
