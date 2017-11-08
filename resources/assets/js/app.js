@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * include Vue and Vue Resource. This gives a great starting point for
@@ -14,10 +13,12 @@ require('./bootstrap');
  */
 
 import Upload from "./components/Upload.vue";
+import ViewPapers from "./components/ViewPapers.vue"
 
 const app = new Vue({
     el: '#app',
     components: {
-        Upload
+        Upload,
+        ViewPapers
     }
 });

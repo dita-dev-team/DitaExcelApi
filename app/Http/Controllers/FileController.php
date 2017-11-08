@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\File;
-use App\Type;
 use App\Unit;
 use App\Utilities\ExcelParser;
 use App\Utilities\FileUtilities;
@@ -13,19 +11,44 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FileController extends Controller
 {
-    //Retrieve File
-    public function retrieveFile($type)
-    {
+	public function retrieveFile( $fetch_type, $identifier ) {
+		switch ( $fetch_type ) {
+			case 'type':
+				return $this->retrieveFileByType( $identifier );
+				break;
+			case 'name':
+				return $this->retrieveFileByName( $identifier );
+				break;
+			default:
+				return $this->verifyData( null );
+		}
+	}
 
-        $fileDetails = Type::latest()->where('name', $type)->firstOrFail();
+    //Retrieve File
+	public function retrieveFileByType( $type )
+    {
         if (env('APP_ENV', 'local') == 'production') {
-            $data = FileUtilities::getFileCloud($fileDetails->id);
+	        $data = FileUtilities::getFileCloudByType( $type );
         } else {
-            $data = FileUtilities::getFile($fileDetails->id);
+	        $data = FileUtilities::getFileByType( $type );
         }
+
+	    $this->verifyData( $data );
 
         return $this->downloadFile($data);
     }
+
+	public function retrieveFileByName( $name ) {
+		if ( env( 'APP_ENV', 'local' ) == 'production' ) {
+			$data = FileUtilities::getFileCloudByName( $name );
+		} else {
+			$data = FileUtilities::getFileByName( $name );
+		}
+
+		$this->verifyData( $data );
+
+		return $this->downloadFile( $data );
+	}
 
     /**
      * @param $data
@@ -40,36 +63,22 @@ class FileController extends Controller
         return $data;
     }
 
-    public function retrieveFileDetails($type)
-    {
-        $fileDetails = Type::latest()->where('name', $type)->firstOrFail();
-        $data = FileUtilities::getDetails($fileDetails->id);
-        $data->load(['type' => function ($query) {
-            $query->select('name', 'file_id');
-        }]);
-        return $data->toJson();
-    }
+	public function retrieveFileDetails( $fetch_type, $identifier ) {
+		$response = null;
+		switch ( $fetch_type ) {
+			case 'type':
+				$data     = FileUtilities::getDetailsByType( $identifier );
+				$response = $data->toJson();
+				break;
+			case 'name':
+				$data     = FileUtilities::getDetailsByName( $identifier );
+				$response = $data->toJson();
+				break;
+			default:
+				$response = response()->json( 'File not found', 404 );
+		}
 
-    public function saveFileType(Request $request)
-    {
-        $newFileTypeData = $request->all();
-
-        $type = $this->createType($newFileTypeData);
-
-        return $type;
-    }
-
-    /**
-     * @param $newFileTypeData
-     * @return Type
-     */
-    private function createType($newFileTypeData)
-    {
-        $type = new Type();
-        $type->name = $newFileTypeData['name'];
-        $type->save();
-
-        return $type;
+		return $response;
     }
 
     public function saveFile(Request $request)
@@ -81,12 +90,12 @@ class FileController extends Controller
 
         $ext = $request->file('file')->getClientOriginalExtension();
 
-        if ($ext != 'xls' && $ext != 'xlsx') {
+	    if ( $ext != 'xls' && $ext != 'xlsx' && $ext != 'pdf' ) {
             return response()->json('Bad request (Invalid file)', 400);
         }
 
         $resource = $request->file('file');
-        $checksum = hash_file('md5', $resource->getRealPath());;
+	    $checksum = hash_file( 'md5', $resource->getRealPath() );
 
         $fileType = $request->file('file')->getClientOriginalExtension();
         $originalFilename = $request->file('file')->getClientOriginalName();
@@ -98,48 +107,8 @@ class FileController extends Controller
             $originalFilename = $resource->getFilename();
             $checksum = hash_file('md5', $resource->getRealPath());
         }
-        //Append Unique Identifier File Name
-        $now = self::fileCreationDate();
-        //Remove Special Characters
-        $tmpFilename = str_replace(' ', '_', $originalFilename);
-        //Concatenate filename and date
-        $filename = $now . '_' . $tmpFilename;
-        //Store File
-        if (env('APP_ENV', 'local') == 'production') {
-            FileUtilities::storeFileCloud($filename, \Illuminate\Support\Facades\File::get($resource->getRealPath()));
-        } else {
-            FileUtilities::storeFile($resource, $filename);
-        }
 
-
-        //Check File Type Exists and Create if Does'nt Create a File Type.
-        //$paramType = Type::firstOrCreate(['name' => $fileType]);
-        //Store File Details
-        //$file = $this->storeFileMetadata($filename, $paramType);
-        $file = $this->storeFileMetadataWithChecksum($filename, $fileType, $checksum);
-
-        return $file;
-    }
-
-    private static function fileCreationDate()
-    {
-        $now = \Carbon\Carbon::now()->toDateTimeString();
-        $now = str_replace(':', '_', $now);
-        $now = str_replace('-', '_', $now);
-        return $now;
-    }
-
-    private function storeFileMetadataWithChecksum($filename, $fileType, $checksum)
-    {
-        $file = new File();
-        $file->file_name = $filename;
-        $file->checksum = $checksum;
-        $file->save();
-        $file->type()->create(['name' => $fileType]);
-        $file->load(['type' => function ($query) {
-            $query->select('name', 'file_id');
-        }]);
-        return $file;
+	    return FileUtilities::saveFile( $originalFilename, $resource, $checksum, $fileType );
     }
 
     public function saveFileToDB(Request $request)
@@ -162,20 +131,10 @@ class FileController extends Controller
         return response()->json('Saved successfully');
     }
 
-    /**
-     * @param $filename
-     * @param $paramType
-     * @return File
-     */
-    private function storeFileMetadata($filename, $paramType)
-    {
-        $file = new File();
-
-        $file->file_name = $filename;
-        $file->file_type = $paramType->id;
-
-        $file->save();
-        return $file;
+	private function verifyData( $data ) {
+		if ( $data == null ) {
+			abort( 404, 'File not found' );
+		}
     }
 
 }

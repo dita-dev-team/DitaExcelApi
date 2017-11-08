@@ -79,11 +79,12 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    DITA EXCEL API
+                    MY PORTAL WEB
                 </div>
 
                 <div class="links">
-                    <a href="/upload">Upload</a>
+                    <a href="/upload">Upload Timetable</a>
+                    <a href="/pastpapers/upload">Past papers</a>
                 </div>
             </div>
         </div>
