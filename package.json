@@ -7,6 +7,7 @@
   "devDependencies": {
     "axios": "^0.16.2",
     "bootstrap-sass": "^3.3.7",
+    "callback-loader": "^0.2.4",
     "gulp": "^3.9.1",
     "jquery": "^3.1.0",
     "laravel-elixir": "^6.0.0-14",
@@ -16,6 +17,7 @@
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.5",
     "vue": "^2.0.1",
+    "vue-icons": "^2.0.0",
     "vue-resource": "^1.0.3",
     "webpack": "^2.6.1"
   }

@@ -17,15 +17,10 @@ class BaseControllerTest extends TestCase
     {
         $units = factory(\App\Unit::class, 100)->create();
 
-        //$this->visit("/api/v1/units?where=true&names=PHL-112,PHY-113,COM-113")->assertResponseStatus(200)->seeJsonStructure(['results']);
-        //$this->visit("/api/v1/units?where=true&shift=Day")->assertResponseStatus(200)->seeJsonStructure(['results']);
-        //$this->visit("/api/v1/units?where=true&shift=Athi")->assertResponseStatus(200)->seeJsonStructure(['results']);
-        //$this->visit("/api/v1/units?where=true&shift=Evening")->assertResponseStatus(200)->seeJsonStructure(['results']);
-        //$this->visit("/api/v1/units?where=true&names=PHL-112,PHY-113,COM-113?shift=Day")->assertResponseStatus(200)->seeJsonStructure(['results']);
-        $this->visit("/api/v1/units?names=" . $units[0]->name . "," . $units[1]->name . "&shift=athi")
-            ->assertResponseStatus(200)
-            ->seeJsonStructure(['results'])
-            ->seeJsonContains([
+	    $this->get( "/api/v1/units?names=" . $units[0]->name . "," . $units[1]->name . "&shift=athi" )
+	         ->assertSuccessful()
+	         ->assertJsonStructure( [ 'results' ] )
+	         ->assertJsonFragment( [
                 'name' => $units[0]->name
             ]);
     }

@@ -39,3 +39,25 @@ $factory->define(App\Unit::class, function (Faker\Generator $faker) {
         'shift' => $faker->randomElement(['athi', 'day', 'evening']),
     ];
 });
+
+$factory->define( App\PastPaper::class, function ( Faker\Generator $faker ) {
+	$semesters = array(
+		'jan 2016',
+		'may 2016',
+		'august 2016',
+		'jan 2017',
+		'may 2017',
+		'august 2017',
+	);
+	$name      = $faker->randomElement( $array =
+			array( "ACS-", "MIS-", "COM-", "ART-", "ENG-", "HPE-", "BIL-", "MAT-", "PHY-", "PHL-" ) )
+	             . $faker->randomElement(
+			$array = array( "111", "113", "112", "114", "115", "116", "211", "212", "213", "300" ) );
+
+	return [
+		'name'          => $name,
+		'resource_type' => $faker->randomElement( array( 'cat', 'assignment', 'exam' ) ),
+		'semester'      => ucfirst( $faker->randomElement( $semesters ) ),
+		'file'          => $faker->word
+	];
+} );
