@@ -20,7 +20,7 @@ Route::get('/upload', function () {
     return view('upload', ['url' => URL::to('/')]);
 });
 
-Route::get( '/pastpapers/upload', 'PastPaperController@upload' );
+Route::get('/pastpapers/upload', 'PastPaperController@create');
 Route::get( '/pastpapers', 'PastPaperController@index' );
 
 Route::get( 'file/{fetch_type}/{identifier}', 'FileController@retrieveFile' );

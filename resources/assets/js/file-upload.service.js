@@ -5,4 +5,9 @@ function upload(formData) {
     return axios.post(url, formData);
 }
 
-export {upload}
+function uploadPastPaper(formData) {
+    const url = '/api/v2/papers';
+    return axios.post(url, formData);
+}
+
+export {upload, uploadPastPaper}

@@ -1,12 +1,23 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Upload Resources to Databases</title>
-    <link rel="stylesheet" href="/public/css/app.css" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Upload Papers</title>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+    <!-- Styles -->
+    <link href="/css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
+<div id="app">
+    {{--<upload></upload>--}}
+    <upload-papers></upload-papers>
+</div>
+<script src="/js/app.js"></script>
 </body>
-
-
 </html>

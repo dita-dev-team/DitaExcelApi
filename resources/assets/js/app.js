@@ -14,11 +14,13 @@ require('./bootstrap');
 
 import Upload from "./components/Upload.vue";
 import ViewPapers from "./components/ViewPapers.vue"
+import UploadPapers from "./components/UploadPapers.vue"
 
 const app = new Vue({
     el: '#app',
     components: {
         Upload,
-        ViewPapers
+        ViewPapers,
+        UploadPapers
     }
 });

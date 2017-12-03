@@ -28,13 +28,14 @@ class PastPapersTest extends TestCase {
 	public function testPastPapersRoutes() {
 		$paper = factory( \App\PastPaper::class )->make();
 		$file  = new UploadedFile( storage_path( 'testing/file.pdf' ), 'file.pdf', null, filesize( storage_path( 'testing/file.pdf' ) ), null, true );
+
 		$this->json( "POST", 'api/v2/papers' )
-		     ->assertStatus( 500 );
-		$this->json( "POST", 'api/v2/papers', [
-			"file"          => $file,
+		     ->assertStatus( 422 );
+		$response = $this->json( "POST", 'api/v2/papers', [
 			"name"          => $paper->name,
 			"semester"      => $paper->semester,
-			"resource_type" => $paper->resource_type
+			"resource_type" => $paper->resource_type,
+			"file"          => $file,
 		] )->assertSuccessful()
 		     ->assertJsonFragment( [ 'File saved successfully' ] );
 
@@ -48,5 +49,13 @@ class PastPapersTest extends TestCase {
 		$this->assertNotNull( $paper );
 		$this->call( 'GET', 'file/name/' . $paper->file )
 		     ->assertHeader( 'content-type', 'application/pdf' );
+		$file = UploadedFile::fake()->create( 'bigfile.pdf', 9160 );
+		$this->json( "POST", 'api/v2/papers', [
+			"name"          => $paper->name,
+			"semester"      => $paper->semester,
+			"resource_type" => $paper->resource_type,
+			"file"          => $file,
+		] )->assertStatus( 422 )
+		     ->assertJsonFragment( [ 'The max file size is 8196 kilobytes' ] );
 	}
 }
