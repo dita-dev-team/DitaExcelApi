@@ -152,43 +152,63 @@ class ParserTest extends TestCase
         //\App\Utilities\ExcelParser::copyToDatabase($path);
     }
 
-	public function testSaveToDBAugust2017() {
-		$path = storage_path( 'testing/excel-new1.xls' );
-		\App\Utilities\ExcelParser::copyToDatabase( $path );
-		$this
-			->assertDatabaseHas( 'units', [
-				'name' => 'ACS-354A',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'ICO-018T',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'PSY-414T',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'COM-264B',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'MME-614X',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'PSY-211P',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'DEV-111X',
-			] )
-			->assertDatabaseHas( 'units', [
-				'name' => 'HRM-611X',
-			] );
-	}
+    public function testSaveToDBAugust2017()
+    {
+        $path = storage_path('testing/excel-new1.xls');
+        \App\Utilities\ExcelParser::copyToDatabase($path);
+        $this
+            ->assertDatabaseHas('units', [
+                'name' => 'ACS-354A',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'ICO-018T',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'PSY-414T',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'COM-264B',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'MME-614X',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'PSY-211P',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'DEV-111X',
+            ])
+            ->assertDatabaseHas('units', [
+                'name' => 'HRM-611X',
+            ]);
+    }
+
+    public function testSaveToDBJanuary2018()
+    {
+        $path = storage_path('testing/excel-new3.xlsx');
+        \App\Utilities\ExcelParser::copyToDatabase($path);
+        $this->assertDatabaseHas('units', [
+            'name' => 'ACS-404A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ACS-454A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ACS-451A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ENG-214T'
+        ])->assertDatabaseHas('units', [
+            'name' => 'PGM-614X'
+        ])->assertDatabaseHas('units', [
+            'name' => 'PEA-141T'
+        ]);
+    }
 
     public function testRoute()
     {
         $file = new UploadedFile(storage_path('testing/excel-new.xlsx'), 'excel-new.xlsx', null, filesize(storage_path('testing/excel-new.xlsx')), null, true);
         $this->json("POST", 'api/v1/files/db',
             ["file" => $file])
-             ->assertSuccessful()
-             ->assertJsonFragment( [ 'Saved successfully' ] );
+            ->assertSuccessful()
+            ->assertJsonFragment(['Saved successfully']);
     }
 
 }
