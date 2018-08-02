@@ -20,6 +20,7 @@ class ParserTest extends TestCase
         $string1 = 'ACS-113';
         $string2 = 'ACS 113';
         $string3 = 'ACS113';
+        $string4 = 'DICT114';
 
         $result = \App\Utilities\ExcelParser::split($string1);
         $this->assertCount(2, $result);
@@ -38,6 +39,10 @@ class ParserTest extends TestCase
         $this->assertContains('ACS', $result);
         $this->assertContains('113', $result);
 
+        $result = \App\Utilities\ExcelParser::split($string4);
+        $this->assertCount(2, $result);
+        $this->assertContains('DICT', $result);
+        $this->assertContains('114', $result);
     }
 
     public function testGetDate()
@@ -185,7 +190,7 @@ class ParserTest extends TestCase
 
     public function testSaveToDBJanuary2018()
     {
-        $path = storage_path('testing/excel-new3.xlsx');
+        $path = storage_path('testing/excel-new3.xls');
         \App\Utilities\ExcelParser::copyToDatabase($path);
         $this->assertDatabaseHas('units', [
             'name' => 'ACS-404A'
@@ -199,6 +204,28 @@ class ParserTest extends TestCase
             'name' => 'PGM-614X'
         ])->assertDatabaseHas('units', [
             'name' => 'PEA-141T'
+        ]);
+    }
+
+    public function testSaveToDBJune2018() {
+        $path = storage_path('testing/excel-new4.xls');
+        \App\Utilities\ExcelParser::copyToDatabase($path);
+        $this->assertDatabaseHas('units', [
+            'name' => 'MAT-313A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'MUS-496A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'BMS-402A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ICO-094T'
+        ])->assertDatabaseHas('units', [
+            'name' => 'DICT-224'
+        ])->assertDatabaseHas('units', [
+            'name' => 'GRA-613X'
+        ])->assertDatabaseHas('units', [
+            'name' => 'SOC-314X'
+        ])->assertDatabaseHas('units', [
+            'name' => 'DICT-211T'
         ]);
     }
 

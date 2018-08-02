@@ -37,7 +37,7 @@ class ExcelParser
                             ExcelParser::$j++;
                             return;
                         }
-                        $pattern = "/(?:[a-z]{3}[\d]{3}|[a-z]{3}[\s]+[\d]{3}|[a-z]{3}-[\d]{3})/i";
+                        $pattern = "/(?:[a-zA-Z]{3,4}[\d]{3}|[a-zA-Z]{3,4}[\s]+[\d]{3}|[a-zA-Z]{3,4}-[\d]{3})/i";
                         //echo ExcelParser::$i . ' ' . ExcelParser::$j;
                         if (preg_match($pattern, $cell) == 1 && ExcelParser::$j > 0) {
                             //echo "Found ${cell}\n";
@@ -69,7 +69,8 @@ class ExcelParser
         } else if (strpos($text, ' ') !== false) {
             return explode(" ", $text);
         } else {
-            return array(substr($text, 0, 3), substr($text, 3));
+            $init_len = preg_match('/^[a-zA-Z]{3}\d/i', $text) == 1 ? 3 : 4;
+            return array(substr($text, 0, $init_len), substr($text, $init_len));
         }
     }
 
@@ -187,15 +188,15 @@ class ExcelParser
         if (strpos($string, '/') != false) {
             //echo $string . "\n";
             $course_codes = array();
-            if (preg_match("/[a-z]{3}[\d]{3}[a-z]{1}(?:\/[a-z]{3}[\d]{3}[a-z]{1})/i", $string) == 1) { // handle type YYY111A/YYY222A
+            if (preg_match("/[a-z]{3,4}[\d]{3}[a-z]{1}(?:\/[a-z]{3,4}[\d]{3}[a-z]{1})/i", $string) == 1) { // handle type YYY111A/YYY222A
                 $course_codes = explode('/', $string);
-            } else if (preg_match("/[a-z]{3}[\d]{3}[a-z]{1}\/[a-z]{1}(?:[\/]*|.{})/i", $string) == 1) { // handle type YYY111A/B
+            } else if (preg_match("/[a-z]{3,4}[\d]{3}[a-z]{1}\/[a-z]{1}(?:[\/]*|.{})/i", $string) == 1) { // handle type YYY111A/B
                 $prefix = substr($string, 0, 6);
                 $sections = explode('/', substr($string, 6));
                 foreach ($sections as $section) {
                     array_push($course_codes, $prefix . $section);
                 }
-            } else if (preg_match("/[A-Z]{3}[\d]{3}(?:\/[\d]{3})*/i", $string) == 1) { // handle type YYY111/222/333/444
+            } else if (preg_match("/[A-Z]{3,4}[\d]{3}(?:\/[\d]{3})*/i", $string) == 1) { // handle type YYY111/222/333/444
                 $prefix = substr($string, 0, 3);
                 $codes = explode('/', substr($string, 3));
                 foreach ($codes as $code) {
@@ -218,7 +219,8 @@ class ExcelParser
         if (strpos($text, '-') !== false) {
             return $text;
         } else {
-            return substr($text, 0, 3) . '-' . substr($text, 3);
+            $init_len = preg_match('/^[a-zA-Z]{3}\d/i', $text) == 1 ? 3 : 4;
+            return substr($text, 0, $init_len) . '-' . substr($text, $init_len);
         }
     }
 
