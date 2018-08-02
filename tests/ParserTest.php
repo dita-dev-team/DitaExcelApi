@@ -190,6 +190,7 @@ class ParserTest extends TestCase
 
     public function testSaveToDBJanuary2018()
     {
+        $this->disableExceptionHandling();
         $path = storage_path('testing/excel-new3.xls');
         \App\Utilities\ExcelParser::copyToDatabase($path);
         $this->assertDatabaseHas('units', [
