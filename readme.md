@@ -1,4 +1,4 @@
-## DitaExcelApi
+## MyPortalWeb
 [![Build Status](https://travis-ci.org/dita-dev-team/MyPortalWeb.svg?branch=master)](https://travis-ci.org/dita-dev-team/MyPortalWeb)
 
 MyPortalWeb is an api built upon the Laravel framework which stores and parses excel documents.
