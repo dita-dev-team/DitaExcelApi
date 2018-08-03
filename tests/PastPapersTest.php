@@ -6,13 +6,13 @@
  * Time: 20:42
  */
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 
 class PastPapersTest extends TestCase {
 
-	use DatabaseTransactions;
+    use DatabaseMigrations;
 	use WithoutMiddleware;
 
 	public function testPastPapersModel() {

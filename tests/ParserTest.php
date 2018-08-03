@@ -1,19 +1,14 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Readers\LaravelExcelReader;
 
-/**
- * Created by PhpStorm.
- * User: michael
- * Date: 15/07/17
- * Time: 23:17
- */
+
 class ParserTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
     public function testSplit()
     {
@@ -135,6 +130,8 @@ class ParserTest extends TestCase
         $this->assertCount(2, $result);
         $result = \App\Utilities\ExcelParser::sanitize('ACS101A/ACS113A');
         $this->assertCount(2, $result);
+        $result = \App\Utilities\ExcelParser::sanitize('ACS101/ACS113A');
+        $this->assertCount(2, $result);
         $result = \App\Utilities\ExcelParser::sanitize('MUS119/219/319/419');
         $this->assertCount(4, $result);
     }
@@ -147,15 +144,15 @@ class ParserTest extends TestCase
         $this->assertEquals('ACS-101A', $result);
     }
 
-    public function testSaveToDBJanuary2017()
-    {
-        //$file = new UploadedFile(storage_path('testing/excel-new.xlsx'), 'excel-new.xlsx', null, filesize(storage_path('testing/excel-new.xlsx')), null, true);
-        //$this->json("POST", 'api/v1/files/db',
-        //    ["file" => $file])
-        //    ->assertResponseStatus(200);
-        //$path = storage_path('testing/excel-new.xlsx');
-        //\App\Utilities\ExcelParser::copyToDatabase($path);
-    }
+//    public function testSaveToDBJanuary2017()
+//    {
+//        //$file = new UploadedFile(storage_path('testing/excel-new.xlsx'), 'excel-new.xlsx', null, filesize(storage_path('testing/excel-new.xlsx')), null, true);
+//        //$this->json("POST", 'api/v1/files/db',
+//        //    ["file" => $file])
+//        //    ->assertResponseStatus(200);
+//        //$path = storage_path('testing/excel-new.xlsx');
+//        //\App\Utilities\ExcelParser::copyToDatabase($path);
+//    }
 
     public function testSaveToDBAugust2017()
     {
@@ -205,6 +202,8 @@ class ParserTest extends TestCase
             'name' => 'PGM-614X'
         ])->assertDatabaseHas('units', [
             'name' => 'PEA-141T'
+        ])->assertDatabaseHas('units', [
+            'name' => 'MCD-619X'
         ]);
     }
 

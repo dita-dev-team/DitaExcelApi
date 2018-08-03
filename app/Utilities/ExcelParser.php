@@ -188,9 +188,9 @@ class ExcelParser
         if (strpos($string, '/') != false) {
             //echo $string . "\n";
             $course_codes = array();
-            if (preg_match("/[a-z]{3,4}[\d]{3}[a-z]{1}(?:\/[a-z]{3,4}[\d]{3}[a-z]{1})/i", $string) == 1) { // handle type YYY111A/YYY222A
+            if (preg_match("/[a-zA-Z]{3,4}[\d]{3}[a-zA-Z]?(?:\/[a-z]{3,4}[\d]{3}[a-z]{1})/i", $string) == 1) { // handle type YYY111A/YYY222A
                 $course_codes = explode('/', $string);
-            } else if (preg_match("/[a-z]{3,4}[\d]{3}[a-z]{1}\/[a-z]{1}(?:[\/]*|.{})/i", $string) == 1) { // handle type YYY111A/B
+            } else if (preg_match("/[a-zA-Z]{3,4}[\d]{3}[a-zA-Z]{1}\/[a-z]{1}(?:[\/]*|.{})/i", $string) == 1) { // handle type YYY111A/B
                 $prefix = substr($string, 0, 6);
                 $sections = explode('/', substr($string, 6));
                 foreach ($sections as $section) {

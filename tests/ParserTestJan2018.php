@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 /**
  * Created by PhpStorm.
  * User: michael
@@ -8,6 +11,8 @@
 
 class ParserTestJan2018 extends TestCase
 {
+    use DatabaseMigrations;
+
     public function test()
     {
         $path = storage_path('testing/excel-new3.xls');

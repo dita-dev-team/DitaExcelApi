@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 
@@ -12,7 +12,7 @@ class FileHandlerTest extends TestCase
      * @return void
      */
     use WithoutMiddleware;
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
 	public function testFileUploadDownload()
     {

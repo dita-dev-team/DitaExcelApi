@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class BaseControllerTest extends TestCase
 {
@@ -10,7 +10,7 @@ class BaseControllerTest extends TestCase
      * @return void
      */
     //use WithoutMiddleware;
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
 
     public function testFetch()
