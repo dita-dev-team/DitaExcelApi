@@ -26,7 +26,6 @@ class PastPaperController extends Controller {
 	}
 
 	public function addPaper( Request $request ) {
-		Log::info( 'PASS1' );
 		$rules    = [
 			'name'          => 'required',
 			'resource_type' => 'required',
@@ -46,8 +45,6 @@ class PastPaperController extends Controller {
 			return response()->json( $validator->messages(), 422 );
 		}
 		//$this->validate($request, $rules, $messages);
-
-		Log::info( 'PASS2' );
 
 		$ext = $request->file( 'file' )->getClientOriginalExtension();
 

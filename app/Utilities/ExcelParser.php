@@ -188,8 +188,11 @@ class ExcelParser
         if (strpos($string, '/') != false) {
             //echo $string . "\n";
             $course_codes = array();
-            if (preg_match("/[a-zA-Z]{3,4}[\d]{3}[a-zA-Z]?(?:\/[a-z]{3,4}[\d]{3}[a-z]{1})/i", $string) == 1) { // handle type YYY111A/YYY222A
+            if (preg_match("/[a-zA-Z]{3,4}[\d]{3}[a-zA-Z]\/[a-z]{3,4}[\d]{3}[a-z]{1}/i", $string) == 1) { // handle type YYY111A/YYY222A
                 $course_codes = explode('/', $string);
+            } else if (preg_match("/[a-zA-Z]{3,4}[\d]{3}\/[a-z]{3,4}[\d]{3}[a-z]{1}/i", $string) == 1) { // handle type YYY111/YYY222A
+                $course_codes = explode('/', $string);
+                $course_codes[0] = $course_codes[0] . substr($string, -1);
             } else if (preg_match("/[a-zA-Z]{3,4}[\d]{3}[a-zA-Z]{1}\/[a-z]{1}(?:[\/]*|.{})/i", $string) == 1) { // handle type YYY111A/B
                 $prefix = substr($string, 0, 6);
                 $sections = explode('/', substr($string, 6));
@@ -199,13 +202,33 @@ class ExcelParser
             } else if (preg_match("/[A-Z]{3,4}[\d]{3}(?:\/[\d]{3})*/i", $string) == 1) { // handle type YYY111/222/333/444
                 $prefix = substr($string, 0, 3);
                 $codes = explode('/', substr($string, 3));
+                $last = substr($string, -1);
+
                 foreach ($codes as $code) {
-	                $section = self::$shift == 'athi' ? 'A' : ( self::$shift == 'day' ? 'T' : 'X' );
-	                array_push( $course_codes, $prefix . $code . $section );
+                    if (!is_numeric(($last))) {
+                        $section = strtoupper($last);
+                    } else {
+                        $section = self::$shift == 'athi' ? 'A' : (self::$shift == 'day' ? 'T' : 'X');
+                    }
+
+                    array_push($course_codes, $prefix . substr($code, 0, 3) . $section);
                 }
             }
+            $temp = array();
+            foreach ($course_codes as $code) {
 
-            return $course_codes;
+                if (strlen($code) > 7) {
+                    $chunks = str_split($code, 7);
+
+                    $temp = array_merge($temp, $chunks);
+                } else {
+                    array_push($temp, $code);
+                }
+            }
+//            if (strpos($string, '261') != false) {
+//                echo implode(',', $temp);
+//            }
+            return $temp;
 
         } else {
             return array($string);

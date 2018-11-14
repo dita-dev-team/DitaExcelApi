@@ -122,28 +122,6 @@ class ParserTest extends TestCase
         $this->assertEquals($details['room'], 'LR13');
     }
 
-    public function testSanitize()
-    {
-        $result = \App\Utilities\ExcelParser::sanitize('ACS101A');
-        $this->assertCount(1, $result);
-        $result = \App\Utilities\ExcelParser::sanitize('ACS101A/B');
-        $this->assertCount(2, $result);
-        $result = \App\Utilities\ExcelParser::sanitize('ACS101A/ACS113A');
-        $this->assertCount(2, $result);
-        $result = \App\Utilities\ExcelParser::sanitize('ACS101/ACS113A');
-        $this->assertCount(2, $result);
-        $result = \App\Utilities\ExcelParser::sanitize('MUS119/219/319/419');
-        $this->assertCount(4, $result);
-    }
-
-    public function testFormatTitle()
-    {
-        $result = \App\Utilities\ExcelParser::formatCourseTitle('ACS101A');
-        $this->assertEquals('ACS-101A', $result);
-        $result = \App\Utilities\ExcelParser::formatCourseTitle('ACS-101A');
-        $this->assertEquals('ACS-101A', $result);
-    }
-
 //    public function testSaveToDBJanuary2017()
 //    {
 //        //$file = new UploadedFile(storage_path('testing/excel-new.xlsx'), 'excel-new.xlsx', null, filesize(storage_path('testing/excel-new.xlsx')), null, true);
@@ -226,6 +204,35 @@ class ParserTest extends TestCase
             'name' => 'SOC-314X'
         ])->assertDatabaseHas('units', [
             'name' => 'DICT-211T'
+        ]);
+    }
+
+    public function testSaveToDBAugust2018()
+    {
+        $path = storage_path('testing/excel-new5.xls');
+        \App\Utilities\ExcelParser::copyToDatabase($path);
+        $this->assertDatabaseHas('units', [
+            'name' => 'ACS-401A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'PSY-211A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'MUS-115A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'BIL-615X'
+        ])->assertDatabaseHas('units', [
+            'name' => 'CHD-642X'
+        ])->assertDatabaseHas('units', [
+            'name' => 'DICT-105T'
+        ])->assertDatabaseHas('units', [
+            'name' => 'MAK-317T'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ICO-056U'
+        ])->assertDatabaseHas('units', [
+            'name' => 'MUS-113A'
+        ])->assertDatabaseHas('units', [
+            'name' => 'COM-445B'
+        ])->assertDatabaseHas('units', [
+            'name' => 'ACS-261A'
         ]);
     }
 
