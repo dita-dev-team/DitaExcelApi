@@ -1,11 +1,11 @@
-## DitaExcelApi
-[![Build Status](https://travis-ci.org/dita-dev-team/DitaExcelApi.svg?branch=master)](https://travis-ci.org/dita-dev-team/DitaExcelApi)
+## MyPortalWeb
+[![Build Status](https://travis-ci.org/dita-dev-team/MyPortalWeb.svg?branch=master)](https://travis-ci.org/dita-dev-team/MyPortalWeb)
 
-DitaExcelApi is an api built upon the Laravel framework which stores and parses excel documents.
+MyPortalWeb is an api built upon the Laravel framework which stores and parses excel documents.
 
 ## Installation
 
-1. Clone the project `git clone https://github.com/dwamatu/DitaExcelApi.git`
+1. Clone the project `git clone https://github.com/dwamatu/MyPortalWeb.git`
 2. Navigate to the cloned directory.
 3. Create a copy of `.env.example` as `.env`
 4. Setup your database credentials in `.env`
